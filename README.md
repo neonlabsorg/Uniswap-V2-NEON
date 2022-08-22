@@ -19,4 +19,6 @@ npx hardhat run ./scripts/deploy.ts
 ```
 
 To use wrapped SOL token set
+```
 SOL_ADDRESS=""
+```
