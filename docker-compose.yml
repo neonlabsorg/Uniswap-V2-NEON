@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  contracts-env:
+    build:
+        context: ./
+    command: yarn run-env
+    network_mode: host
