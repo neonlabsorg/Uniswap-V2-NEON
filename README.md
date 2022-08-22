@@ -12,6 +12,11 @@ tokens)
 - gathering rewards from both pools after swaps
 - transfer of part of LP tokens from one farming address to another - swaps and rewards receive with new LP tokens distribution
 
+Run local NEON environment:
+```shell
+sudo NEON_EVM_COMMIT=v0.8.3 FAUCET_COMMIT=latest REVISION=v0.9.1 docker-compose -f docker-compose.neon.yml up -d
+```
+
 Run:
 
 ```shell
