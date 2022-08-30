@@ -1,6 +1,12 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 
+const proxyUrl = process.env.PROXY_URL;
+// @ts-ignore
+const accounts = process.env.ACCOUNTS.split(",");
+// @ts-ignore
+const chainId = parseInt(process.env.CHAIN_ID);
+
 const config: HardhatUserConfig = {
   solidity: {
     compilers: [
@@ -26,23 +32,14 @@ const config: HardhatUserConfig = {
   },
   defaultNetwork: 'neonlabs',
   networks: {
-    hardhat: {
-      gas: 3000000000,
-      blockGasLimit: 100000000429720,
-      gasPrice: 875000000
-    },
     neonlabs: {
-      url: 'http://localhost:9090/solana',
-      accounts: ['0x41167312f8c46439b2bcc5e5a6af929262efcd20357a56ebcbc455d835d9f080', 
-      '0x41167312f8c46439b2bcc5e5a6af929262efcd20357a56ebcbc455d835d9f081', '0x41167312f8c46439b2bcc5e5a6af929262efcd20357a56ebcbc455d835d9f082', 
-      '0x41167312f8c46439b2bcc5e5a6af929262efcd20357a56ebcbc455d835d9f083', '0x41167312f8c46439b2bcc5e5a6af929262efcd20357a56ebcbc455d835d9f084'],
+      url: proxyUrl,
       // @ts-ignore
-      network_id: 111,
-      chainId: 111,
+      accounts: accounts,
+      // @ts-ignore
+      chainId: chainId,
       allowUnlimitedContractSize: false,
       timeout: 100000000,
-      // @ts-ignore
-      isFork: true
     }
   },
 };
