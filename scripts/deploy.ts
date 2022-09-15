@@ -40,9 +40,9 @@ async function fixture() {
   const WETH = await ERC20.deploy(fromEther('10000'))
   await WETH.deployTransaction.wait(30)
 
-  console.log("Deploy WETHPartner")
-  const WETHPartner = await ERC20.deploy(fromEther('10000'))
-  await WETHPartner.deployTransaction.wait(30)
+  // console.log("Deploy WETHPartner")
+  // const WETHPartner = await ERC20.deploy(fromEther('10000'))
+  // await WETHPartner.deployTransaction.wait(30)
 
   console.log("Deploy factoryV2")
   const factoryV2 = await UniswapV2Factory.deploy(deployer.address)

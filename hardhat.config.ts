@@ -1,11 +1,11 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 
-const proxyUrl = process.env.PROXY_URL;
+const proxyUrl = process.env.NEON_PROXY_URL;
 // @ts-ignore
-const accounts = process.env.ACCOUNTS.split(",");
+const accounts = process.env.NEON_ACCOUNTS.split(",");
 // @ts-ignore
-const chainId = parseInt(process.env.CHAIN_ID);
+const chainId = parseInt(process.env.NEON_CHAIN_ID);
 
 const config: HardhatUserConfig = {
   solidity: {
