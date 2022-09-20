@@ -1,6 +1,7 @@
 # Uniswap V2 test in NEON
 
-This project demonstrates usage of Uniswap V2 in NEON environment.
+This project demonstrates usage of Uniswap V2 in NEON environment. 
+The repository consist of joined code of forks from https://github.com/Uniswap/v2-core and https://github.com/Uniswap/v2-periphery.
 
 # Testing of Uni V2 LP tokens farming
 - testing actions in Uniswap V2 protocol
