@@ -47,10 +47,12 @@ async function fixture() {
   console.log("Deploy factoryV2")
   const factoryV2 = await UniswapV2Factory.deploy(deployer.address)
   await factoryV2.deployTransaction.wait(30)
+  console.log("FactoryV2 address: ", factoryV2.address)
 
   console.log("Deploy router")
   const router = await UniswapV2Router01.deploy(factoryV2.address, WETH.address)
   await router.deployTransaction.wait(30)
+  console.log("Router address: ", router.address)
 
   console.log("Deploy createPair")
   const createdPair = await factoryV2.createPair(tokenA.address, tokenB.address)
@@ -64,11 +66,12 @@ async function fixture() {
   const pairAddress = await factoryV2.getPair(tokenA.address, tokenB.address)
   console.log("Get Pair")
   const pairAddress2 = await factoryV2.getPair(tokenB.address, tokenC.address)
+  console.log("Pair 1 address ", pairAddress)
+  console.log("Pair 2 address ", pairAddress2)
 
   console.log("Attach pair: ", pairAddress)
   const pair = await Pair.attach(pairAddress)
   const pair2 = await Pair.attach(pairAddress2)
-  console.log("Pair ", pair.address, pair2.address)
 
   return {router: router, pair: pair, pair2: pair2};
 }
@@ -91,9 +94,10 @@ async function main() {
   const token2_1 = await ERC20.attach(await pair2.token1());
   console.log("Attach token pair 2 ", token2_0.address, token2_1.address)
 
-  await token0.transfer(LP.address, fromEther('10'))
-  await token1.transfer(LP.address, fromEther('10'))
-  await token2_0.transfer(LP.address, fromEther('10'))
+  await token0.transfer(LP.address, fromEther('100'))
+  await token1.transfer(LP.address, fromEther('100'))
+  await token2_0.transfer(LP.address, fromEther('100'))
+  await token2_1.transfer(LP.address, fromEther('100'))
 
   console.log("LP initial balances    token0:", toEther(await token0.balanceOf(LP.address)), "   token1:", toEther(await token1.balanceOf(LP.address)), "    LP token:", toEther(await pair.balanceOf(LP.address)))
   console.log("Pair total supply:", toEther(await pair.totalSupply()))
@@ -110,9 +114,13 @@ async function main() {
   console.log("Pair total supply:", toEther(await pair.totalSupply()))
 
   await token0.transfer(user.address, fromEther('10'))
+  console.log("Transfer 1");
   await token1.transfer(user.address, fromEther('10'))
+  console.log("Transfer 2");
   await token2_0.transfer(user.address, fromEther('10'))
+  console.log("Transfer 3");
   await token2_1.transfer(user.address, fromEther('10'))
+  console.log("Transfer 4");
   
   await token0.connect(user).approve(router.address, MaxUint256)
   await token1.connect(user).approve(router.address, MaxUint256)

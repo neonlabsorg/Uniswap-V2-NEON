@@ -5,7 +5,8 @@ const proxyUrl = process.env.NEON_PROXY_URL;
 // @ts-ignore
 const accounts = process.env.NEON_ACCOUNTS.split(",");
 // @ts-ignore
-const chainId = parseInt(process.env.NEON_CHAIN_ID);
+const chainId = parseInt(process.env.NEON_CHAIN_ID) || 111;
+
 
 const config: HardhatUserConfig = {
   solidity: {
