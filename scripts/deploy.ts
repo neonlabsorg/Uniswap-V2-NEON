@@ -89,15 +89,22 @@ async function main() {
   console.log("Attach token 0")
   const token1 = await ERC20.attach(await pair.token1());
   console.log("Attach token 1")
+  let token2;
 
   const token2_0 = await ERC20.attach(await pair2.token0());
   const token2_1 = await ERC20.attach(await pair2.token1());
+
+  if (token2_0 === token0 || token2_0 === token1){
+    token2 = token2_1;
+  } else {
+    token2 = token2_0;
+  }
+
   console.log("Attach token pair 2 ", token2_0.address, token2_1.address)
 
   await token0.transfer(LP.address, fromEther('100'))
   await token1.transfer(LP.address, fromEther('100'))
-  await token2_0.transfer(LP.address, fromEther('100'))
-  await token2_1.transfer(LP.address, fromEther('100'))
+  await token2.transfer(LP.address, fromEther('100'))
 
   console.log("LP initial balances    token0:", toEther(await token0.balanceOf(LP.address)), "   token1:", toEther(await token1.balanceOf(LP.address)), "    LP token:", toEther(await pair.balanceOf(LP.address)))
   console.log("Pair total supply:", toEther(await pair.totalSupply()))
@@ -152,8 +159,8 @@ async function main() {
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token2_0.address], user.address, MaxUint256, overrides)
   console.log("\nSwap 6 (two pairs)");
-  console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token2:", toEther(await token2_0.balanceOf(user.address)))
-  console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token2:", toEther(await token2_0.balanceOf(pair2.address)))
+  console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token2:", toEther(await token2.balanceOf(user.address)))
+  console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token2:", toEther(await token2.balanceOf(pair2.address)))
 
 
   console.log("\nUser performs swaps token1 -> token0 in the pool with output amount 1 ether using router.swapTokensForExactTokens()")
