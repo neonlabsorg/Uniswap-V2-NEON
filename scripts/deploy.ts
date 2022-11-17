@@ -199,17 +199,17 @@ async function main() {
   console.log("\nSwap 5");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
-  tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address, token2.address], user.address, MaxUint256, overrides)
-  const twiceSwapReceipt = await tx.wait(30)
-  console.log("\nSwap 6 (two pairs)");
-  console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token2:", toEther(await token2.balanceOf(user.address)))
-  console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token2:", toEther(await token2.balanceOf(pair2.address)))
+  //tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address, token2.address], user.address, MaxUint256, overrides)
+  //const twiceSwapReceipt = await tx.wait(30)
+  //console.log("\nSwap 6 (two pairs)");
+  //console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token2:", toEther(await token2.balanceOf(user.address)))
+  //console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token2:", toEther(await token2.balanceOf(pair2.address)))
 
-  report["actions"].push({
-    "name": "Two pairs swap",
-    "usedGas": twiceSwapReceipt["gasUsed"].toString(),
-    "gasPrice": gasPrice.toString()
-  });
+  //report["actions"].push({
+  //  "name": "Two pairs swap",
+  //  "usedGas": twiceSwapReceipt["gasUsed"].toString(),
+  //  "gasPrice": gasPrice.toString()
+  //});
 
   console.log("\nUser performs swaps token1 -> token0 in the pool with output amount 1 ether using router.swapTokensForExactTokens()")
   tx = await router.connect(user).swapTokensForExactTokens(outputAmount, MaxUint256, [token1.address, token0.address], user.address, MaxUint256, overrides)
