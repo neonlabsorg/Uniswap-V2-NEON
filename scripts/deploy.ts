@@ -178,7 +178,8 @@ async function main() {
   report["actions"].push({
     "name": "Direct swap",
     "usedGas": swapReceipt["gasUsed"].toString(),
-    "gasPrice": gasPrice.toString()
+    "gasPrice": gasPrice.toString(),
+    "tx": swapReceipt["transactionHash"]
   });
 
   console.log("\nSwap 2");
