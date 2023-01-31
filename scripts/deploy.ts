@@ -24,44 +24,44 @@ async function fixture() {
   const Pair = await ethers.getContractFactory("UniswapV2Pair");
   console.log("Deploy tokenA")
   const tokenA = SOL_ADDRESS ? await ERC20.attach(SOL_ADDRESS) : await ERC20.deploy(fromEther('10000'))
-  await tokenA.deployTransaction.wait(30)
+  await tokenA.deployTransaction.wait(1)
   console.log("Token address ", tokenA.address)
 
   console.log("Deploy tokenB")
   const tokenB = await ERC20.deploy(fromEther('10000'))
-  await tokenB.deployTransaction.wait(30)
+  await tokenB.deployTransaction.wait(1)
   console.log("Token address ", tokenB.address)
 
   console.log("Deploy tokenC")
   const tokenC = await ERC20.deploy(fromEther('10000'))
-  await tokenC.deployTransaction.wait(30)
+  await tokenC.deployTransaction.wait(1)
   console.log("Token address ", tokenC.address)
 
   console.log("Deploy WETH")
   const WETH = await ERC20.deploy(fromEther('10000'))
-  await WETH.deployTransaction.wait(30)
+  await WETH.deployTransaction.wait(1)
 
   // console.log("Deploy WETHPartner")
   // const WETHPartner = await ERC20.deploy(fromEther('10000'))
-  // await WETHPartner.deployTransaction.wait(30)
+  // await WETHPartner.deployTransaction.wait(1)
 
   console.log("Deploy factoryV2")
   const factoryV2 = await UniswapV2Factory.deploy(deployer.address)
-  await factoryV2.deployTransaction.wait(30)
+  await factoryV2.deployTransaction.wait(1)
   console.log("FactoryV2 address: ", factoryV2.address)
 
   console.log("Deploy router")
   const router = await UniswapV2Router01.deploy(factoryV2.address, WETH.address)
-  await router.deployTransaction.wait(30)
+  await router.deployTransaction.wait(1)
   console.log("Router address: ", router.address)
 
   console.log("Deploy createPair")
   const createdPair = await factoryV2.createPair(tokenA.address, tokenB.address)
-  await createdPair.wait(30)
+  await createdPair.wait(1)
 
   console.log("Deploy createPair2")
   const createdPair2 = await factoryV2.createPair(tokenB.address, tokenC.address)
-  await createdPair2.wait(30)
+  await createdPair2.wait(1)
 
   console.log("Get Pair")
   const pairAddress = await factoryV2.getPair(tokenA.address, tokenB.address)
@@ -118,51 +118,51 @@ async function main() {
   console.log(`Pair 2 token addresses: ${token2_0.address} ${token2_1.address}`)
 
   tx = await token0.transfer(LP.address, fromEther('100'))
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await token1.transfer(LP.address, fromEther('100'))
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await token2.transfer(LP.address, fromEther('100'))
-  await tx.wait(30)
+  await tx.wait(1)
 
   console.log("LP initial balances    token0:", toEther(await token0.balanceOf(LP.address)), "   token1:", toEther(await token1.balanceOf(LP.address)), "   token2:", toEther(await token2.balanceOf(LP.address)), "    LP token:", toEther(await pair.balanceOf(LP.address)))
   console.log("Pair total supply:", toEther(await pair.totalSupply()))
 
   console.log("Approve all tokens for LP user");
   tx = await token0.connect(LP).approve(router.address, MaxUint256)
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await token1.connect(LP).approve(router.address, MaxUint256)
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await token2.connect(LP).approve(router.address, MaxUint256)
-  await tx.wait(30)
+  await tx.wait(1)
 
   console.log("Add liquidities into two pools")
   tx = await router.connect(LP).addLiquidity(token0.address, token1.address, fromEther('10'), fromEther('10'), 0, 0, LP.address, MaxUint256)
   console.log(`TX: ${tx.hash}`)
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await router.connect(LP).addLiquidity(token2_0.address, token2_1.address, fromEther('10'), fromEther('10'), 0, 0, LP.address, MaxUint256)
   console.log(`TX: ${tx.hash}`)
-  await tx.wait(30)
+  await tx.wait(1)
 
   console.log("LP current balances    token0:", toEther(await token0.balanceOf(LP.address)), "   token1:", toEther(await token1.balanceOf(LP.address)), "    LP token:", toEther(await pair.balanceOf(LP.address)))
   console.log("Pair total supply:", toEther(await pair.totalSupply()))
 
   tx = await token0.transfer(user.address, fromEther('10'))
   console.log(`Transfer 1 ${tx.hash}`);
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await token1.transfer(user.address, fromEther('10'))
   console.log(`Transfer 2 ${tx.hash}`);
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await token2.transfer(user.address, fromEther('10'))
   console.log(`Transfer 3 ${tx.hash}`);
-  await tx.wait(30)
+  await tx.wait(1)
 
   console.log("Approve all tokens for user");
   tx = await token0.connect(user).approve(router.address, MaxUint256)
-  await tx.wait(30)
+  await tx.wait(1)
   tx = await token1.connect(user).approve(router.address, MaxUint256)
-  await tx.wait(30)
-  const approveReceipt = await token2.connect(user).approve(router.address, MaxUint256)
-  await approveReceipt.wait(30)
+  await tx.wait(1)
+  tx = await token2.connect(user).approve(router.address, MaxUint256)
+  const approveReceipt = await tx.wait(1)
 
   report["actions"].push({
     "name": "Token approve",
@@ -175,12 +175,12 @@ async function main() {
   let outputAmount = fromEther('1')
   console.log("\nUser performs swaps token0 -> token1 in the pool with swap amount 1 ether using router.swapExactTokensForTokens()\n")
   tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 1");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address], user.address, MaxUint256, overrides)
-  const swapReceipt = await tx.wait(30)
+  const swapReceipt = await tx.wait(1)
 
   report["actions"].push({
     "name": "Direct swap",
@@ -193,22 +193,22 @@ async function main() {
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 3");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 4");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 5");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   //tx = await router.connect(user).swapExactTokensForTokens(swapAmount, 0, [token0.address, token1.address, token2.address], user.address, MaxUint256, overrides)
-  //const twiceSwapReceipt = await tx.wait(30)
+  //const twiceSwapReceipt = await tx.wait(1)
   //console.log("\nSwap 6 (two pairs)");
   //console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token2:", toEther(await token2.balanceOf(user.address)))
   //console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token2:", toEther(await token2.balanceOf(pair2.address)))
@@ -221,42 +221,42 @@ async function main() {
 
   console.log("\nUser performs swaps token1 -> token0 in the pool with output amount 1 ether using router.swapTokensForExactTokens()")
   tx = await router.connect(user).swapTokensForExactTokens(outputAmount, MaxUint256, [token1.address, token0.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 1");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapTokensForExactTokens(outputAmount, MaxUint256, [token1.address, token0.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 2");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapTokensForExactTokens(outputAmount, MaxUint256, [token1.address, token0.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 3");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapTokensForExactTokens(outputAmount, MaxUint256, [token1.address, token0.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 4");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   tx = await router.connect(user).swapTokensForExactTokens(outputAmount, MaxUint256, [token1.address, token0.address], user.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("\nSwap 5");
   console.log("User balance    token0:", toEther(await token0.balanceOf(user.address)), "   token1:", toEther(await token1.balanceOf(user.address)))
   console.log("Pool balance    token0:", toEther(await token0.balanceOf(pair.address)), "   token1:", toEther(await token1.balanceOf(pair.address)))
   
   console.log("\n\nLP transfers LP tokens to beneficiary");
   tx = await pair.connect(LP).transfer(beneficiary.address, await pair.balanceOf(LP.address))
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("LP current balances             token0:", toEther(await token0.balanceOf(LP.address)), "   token1:", toEther(await token1.balanceOf(LP.address)), "    LP token:", toEther(await pair.balanceOf(LP.address)))
   console.log("Beneficiary current balances    token0:", toEther(await token0.balanceOf(beneficiary.address)), "   token1:", toEther(await token1.balanceOf(beneficiary.address)), "    LP token:", toEther(await pair.balanceOf(beneficiary.address)))
   tx = await pair.connect(beneficiary).approve(router.address, MaxUint256)
-  await tx.wait(30)
+  await tx.wait(1)
   
   console.log("\nBeneficiary removes liquidity from the pool collecting rewards");
   tx = await router.connect(beneficiary).removeLiquidity(token0.address, token1.address, await pair.balanceOf(beneficiary.address), 0, 0, beneficiary.address, MaxUint256, overrides)
-  await tx.wait(30)
+  await tx.wait(1)
   console.log("Beneficiary current balances    token0:", toEther(await token0.balanceOf(beneficiary.address)), "   token1:", toEther(await token1.balanceOf(beneficiary.address)), "    LP token:", toEther(await pair.balanceOf(beneficiary.address)))
   console.log("Pair total supply:", toEther(await pair.totalSupply()))
 
