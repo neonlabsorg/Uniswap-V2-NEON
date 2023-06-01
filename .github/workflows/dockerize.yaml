@@ -13,7 +13,7 @@ jobs:
       - name: Define tag
         id: define-env
         run: |
-          if [[ "${{ github.ref_name }}" == 'main'  ]]; then
+          if [[ "${{ github.ref_name }}" == 'master'  ]]; then
             tag='latest'
           else
             tag='${{ github.sha }}'
