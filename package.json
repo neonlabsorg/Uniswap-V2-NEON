@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "run-env": "yarn install --non-interactive --frozen-lockfile",
-    "deploy": "hardhat run ./scripts/deploy.ts"
+    "compile": "hardhat clean && hardhat compile --concurrency 1",
+    "deploy": "hardhat run --no-compile ./scripts/deploy.ts",
+    "test": "hardhat test"
   },
   "author": "",
   "license": "ISC",
